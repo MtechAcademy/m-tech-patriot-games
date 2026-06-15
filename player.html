@@ -1,7 +1,53 @@
-<div id="waiting" class="card hidden">
-  <h2 id="welcome"></h2>
-  <p>You're in. Watch the host screen for the next question.</p>
-  <button <a class="btn" href="player.html?resetName=1">Change Patriot Name</a>
-  Change Patriot Name
-</button>
-</div>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Join - M-Tech Patriot Games</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap center">
+    <img class="logo" src="assets/mtech-logo.png">
+    <h1>M-Tech Patriot Games</h1>
+    <h2>Stars, Stripes & Service</h2>
+
+    <div id="join" class="joinbox card">
+      <h2>Enter Your Patriot Name</h2>
+      <p class="small">Need inspiration?</p>
+      <div class="suggestions" id="suggestions"></div>
+      <input class="input" id="name" placeholder="Your screen name">
+      <button class="btn gold" id="joinBtn">Join Game</button>
+      <p id="joinError" class="small"></p>
+    </div>
+
+    <div id="waiting" class="card hidden">
+      <h2 id="welcome"></h2>
+      <p>You're in. Watch the host screen for the next question.</p>
+      <a class="btn" href="player.html?resetName=1">Change Patriot Name</a>
+    </div>
+
+    <div id="questionBox" class="card hidden">
+      <div class="round" id="qMeta"></div>
+      <div class="timer" id="timer">20</div>
+      <div class="question" id="question"></div>
+      <div id="choices"></div>
+      <p id="answerStatus"></p>
+    </div>
+
+    <div id="reveal" class="card hidden">
+      <h2 id="revealMsg"></h2>
+      <p id="correctText"></p>
+    </div>
+
+    <div id="final" class="card hidden">
+      <h1>Game Complete</h1>
+      <p>Look at the main screen for final awards.</p>
+    </div>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="firebase-config.js"></script>
+  <script type="module" src="player.js"></script>
+</body>
+</html>
