@@ -1,3 +1,8 @@
+if (new URLSearchParams(window.location.search).has('resetName')) {
+  localStorage.removeItem('mtechPlayerId');
+  localStorage.removeItem('mtechPlayerName');
+  window.location.href = 'player.html';
+}
 import { listenGame, joinPlayer, submitAnswer, Q, roundFor } from './app.js';
 
 let game = null;
