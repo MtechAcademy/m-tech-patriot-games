@@ -1,5 +1,7 @@
 <div id="waiting" class="card hidden">
   <h2 id="welcome"></h2>
   <p>You're in. Watch the host screen for the next question.</p>
-  <button class="btn" id="leaveBtn">Change Patriot Name</button>
+  <button class="btn" id="leaveBtn" onclick="localStorage.removeItem('mtechPlayerId'); localStorage.removeItem('mtechPlayerName'); window.location.href='player.html';">
+  Change Patriot Name
+</button>
 </div>
