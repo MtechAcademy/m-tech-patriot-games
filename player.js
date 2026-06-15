@@ -29,6 +29,16 @@ document.querySelectorAll('.pill').forEach(b => {
   };
 });
 
+const leaveBtn = document.getElementById('leaveBtn');
+
+if (leaveBtn) {
+  leaveBtn.onclick = () => {
+    localStorage.removeItem('mtechPlayerId');
+    localStorage.removeItem('mtechPlayerName');
+    location.reload();
+  };
+}
+
 $('joinBtn').onclick = async () => {
   try {
     await joinPlayer($('name').value);
