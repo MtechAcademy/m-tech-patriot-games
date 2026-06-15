@@ -31,7 +31,9 @@ function render(){
   if(game.status==='final') { show('final'); renderFinal(); }
 }
 function renderPlayers(){
-  $('playersTitle').textContent = `Players Joined (${players.length})`;
+  const count = players ? players.length : 0;
+$('playersTitle').textContent = `Players Joined (${count})`;
+console.log('PLAYERS', players);
 
   $('players').innerHTML = players.length
     ? players.map(p=>`<span class="player">${esc(p.name)}</span>`).join('')
