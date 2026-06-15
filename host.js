@@ -31,7 +31,11 @@ function render(){
   if(game.status==='final') { show('final'); renderFinal(); }
 }
 function renderPlayers(){
-  $('players').innerHTML = players.length ? players.map(p=>`<span class="player">${esc(p.name)}</span>`).join('') : '<p class="small">Waiting for players...</p>';
+  $('playersTitle').textContent = `Players Joined (${players.length})`;
+
+  $('players').innerHTML = players.length
+    ? players.map(p=>`<span class="player">${esc(p.name)}</span>`).join('')
+    : '<p class="small">Waiting for players...</p>';
 }
 function renderQuestion(){
   const i = game.questionIndex; const q=Q[i]; const round=roundFor(i);
