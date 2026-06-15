@@ -33,9 +33,9 @@ const leaveBtn = document.getElementById('leaveBtn');
 
 if (leaveBtn) {
   leaveBtn.onclick = () => {
-    localStorage.removeItem('mtechPlayerId');
-    localStorage.removeItem('mtechPlayerName');
-    location.reload();
+  localStorage.removeItem('mtechPlayerId');
+  localStorage.removeItem('mtechPlayerName');
+  window.location.href = 'player.html';
   };
 }
 
