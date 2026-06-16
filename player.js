@@ -29,16 +29,18 @@ document.querySelectorAll('.pill').forEach(b => {
   };
 });
 
-const changeNameBtn = document.getElementById('changeNameBtn');
+document.addEventListener('click', e => {
+  if (e.target && e.target.id === 'changeNameBtn') {
+    e.preventDefault();
 
-if (changeNameBtn) {
-  changeNameBtn.onclick = () => {
     localStorage.removeItem('mtechPlayerId');
     localStorage.removeItem('mtechPlayerName');
+
     $('name').value = '';
+    $('welcome').textContent = '';
     show('join');
-  };
-}
+  }
+});
 
 $('joinBtn').onclick = async () => {
   try {
