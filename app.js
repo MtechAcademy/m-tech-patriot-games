@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, onSnapshot, serverTimestamp, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, onSnapshot, serverTimestamp, addDoc, query, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const app = initializeApp(window.firebaseConfig);
 export const db = getFirestore(app);
@@ -26,7 +26,19 @@ export function listenGame(cb){ return onSnapshot(gameRef, s => cb(s.exists()?s.
 export function listenPlayers(cb){ return onSnapshot(playersRef, snap => cb(snap.docs.map(d=>({id:d.id,...d.data()})))); }
 export function listenAnswers(cb){ return onSnapshot(answersRef, snap => cb(snap.docs.map(d=>({id:d.id,...d.data()})))); }
 export async function resetGame(){
-  await setDoc(gameRef,{status:'lobby',questionIndex:-1,questionStartedAt:null,createdAt:serverTimestamp(),eventName:'M-Tech Patriot Games'});
+  const playerDocs = await getDocs(playersRef);
+  await Promise.all(playerDocs.docs.map(d => deleteDoc(d.ref)));
+
+  const answerDocs = await getDocs(answersRef);
+  await Promise.all(answerDocs.docs.map(d => deleteDoc(d.ref)));
+
+  await setDoc(gameRef,{
+    status:'lobby',
+    questionIndex:-1,
+    questionStartedAt:null,
+    createdAt:serverTimestamp(),
+    eventName:'M-Tech Patriot Games'
+  });
 }
 export async function startQuestion(index){ await updateDoc(gameRef,{status:'question',questionIndex:index,questionStartedAt:Date.now()}); }
 export async function revealAnswer(){ await updateDoc(gameRef,{status:'reveal'}); }
