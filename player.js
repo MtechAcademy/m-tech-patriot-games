@@ -21,57 +21,64 @@ const ideas = [
   'The Torsion Patriot'
 ];
 
-$('suggestions').innerHTML = ideas.map(x => `<button class="pill" type="button">${x}</button>`).join('');
-
-document.querySelectorAll('.pill').forEach(b => {
-  b.onclick = () => {
-    $('name').value = b.textContent;
-  };
-});
-
-document.addEventListener('click', e => {
-  if (e.target && e.target.id === 'changeNameBtn') {
-    e.preventDefault();
-
-    localStorage.removeItem('mtechPlayerId');
-    localStorage.removeItem('mtechPlayerName');
-
-    $('name').value = '';
-    $('welcome').textContent = '';
-    show('join');
-  }
-});
-
-$('joinBtn').onclick = async () => {
-  try {
-    await joinPlayer($('name').value);
-    $('welcome').textContent = `Welcome, ${localStorage.getItem('mtechPlayerName')}`;
-    render();
-  } catch (e) {
-    $('joinError').textContent = e.message;
-  }
-};
-
-if (localStorage.getItem('mtechPlayerId')) {
-  $('welcome').textContent = `Welcome back, ${localStorage.getItem('mtechPlayerName') || 'player'}`;
-}
-
-listenGame(g => {
-  game = g;
-  render();
-});
-
 function show(id) {
   ['join', 'waiting', 'questionBox', 'reveal', 'final'].forEach(x => {
-    $(x).classList.toggle('hidden', x !== id);
+    const el = $(x);
+    if (el) el.classList.toggle('hidden', x !== id);
   });
 }
 
+function resetPlayerName() {
+  localStorage.removeItem('mtechPlayerId');
+  localStorage.removeItem('mtechPlayerName');
+  selected = null;
+  submitted = false;
+  currentQuestionIndex = null;
+
+  if ($('name')) $('name').value = '';
+  if ($('welcome')) $('welcome').textContent = '';
+  if ($('joinError')) $('joinError').textContent = '';
+
+  show('join');
+}
+
+function setupSuggestions() {
+  $('suggestions').innerHTML = ideas
+    .map(x => `<button class="pill" type="button">${x}</button>`)
+    .join('');
+
+  document.querySelectorAll('.pill').forEach(b => {
+    b.addEventListener('click', () => {
+      $('name').value = b.textContent;
+    });
+  });
+}
+
+function setupButtons() {
+  $('joinBtn').addEventListener('click', async () => {
+    try {
+      $('joinError').textContent = '';
+      await joinPlayer($('name').value);
+      $('welcome').textContent = `Welcome, ${localStorage.getItem('mtechPlayerName')}`;
+      render();
+    } catch (e) {
+      $('joinError').textContent = e.message;
+    }
+  });
+
+  $('changeNameBtn').addEventListener('click', resetPlayerName);
+}
+
 function render() {
-  if (!localStorage.getItem('mtechPlayerId')) {
+  const playerId = localStorage.getItem('mtechPlayerId');
+  const playerName = localStorage.getItem('mtechPlayerName');
+
+  if (!playerId) {
     show('join');
     return;
   }
+
+  $('welcome').textContent = `Welcome, ${playerName || 'player'}`;
 
   if (!game || game.status === 'lobby' || game.status === 'checkpoint') {
     show('waiting');
@@ -116,7 +123,7 @@ function renderQuestion() {
   }).join('');
 
   document.querySelectorAll('.choice').forEach(b => {
-    b.onclick = async () => {
+    b.addEventListener('click', async () => {
       if (submitted) return;
 
       submitted = true;
@@ -132,7 +139,7 @@ function renderQuestion() {
       );
 
       renderQuestion();
-    };
+    });
   });
 
   tick();
@@ -176,3 +183,13 @@ function esc(s) {
     '"': '&quot;'
   }[c]));
 }
+
+setupSuggestions();
+setupButtons();
+
+listenGame(g => {
+  game = g;
+  render();
+});
+
+render();
